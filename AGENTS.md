@@ -7,7 +7,7 @@ tunneled reverse proxy with identity and access control.
 - This flake exists because nixpkgs' Pangolin package has runtime defects
   (see README "Why This Flake Exists"). Do not switch back to the nixpkgs
   package without checking those are fixed upstream.
-- Validate: `nix flake check`; `nix run .#pangctl`.
+- Validate: `nix flake check`; `nix run .#pangctl -- --help`.
 
 <!-- nix-agent-guides:core BEGIN (v3). Synced from deepwatrcreatur/nix-agent-guides templates/agents-core.md by scripts/sync-agents-core.sh. Edit it there, not here. -->
 ## Shared conventions
@@ -26,11 +26,12 @@ Summary (offline fallback):
   three lines above the code they protect; longer reasoning goes in `docs/`
   with a pointer (`# WHY: docs/x.md#heading`). Never narrate the next line.
 - **Before editing a file**, read its tags:
-  `rg -n '# (WHY|GOTCHA|INVARIANT|SECURITY|UPSTREAM|TODO)' <file>`.
+  `grep -nE '# (WHY|GOTCHA|INVARIANT|SECURITY|UPSTREAM|TODO)' <file>`.
   Fix or delete any tag your change makes untrue.
 - **Exported Nix functions** get RFC 145 doc comments (`/** ... */`).
-- **Validate before committing:** the narrowest `nix build` first, then
-  `nix flake check`; read all output. Run `bash -n`/`shellcheck` on shell
+- **Validate before committing:** build the narrowest affected output
+  first (when the flake has packages), then `nix flake check`; read all
+  output. Run `bash -n`/`shellcheck` on shell
   generated from Nix. Exit code 0 is not proof the change worked.
 - **Same change, same PR:** behaviour changes come with docs and a check.
 - **Never commit secrets**, and do not deploy to or change live hosts unless
